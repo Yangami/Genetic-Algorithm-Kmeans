@@ -1,0 +1,16 @@
+total_liability,803701120.03125
+market_cap,68.23529374998726
+roe,2.047067949826625e-308
+pcf_ratio,917.3027997615815
+pe_ratio_lyr,52.61699999997089
+pb_ratio,4.050487499998163
+net_profit_to_total_revenue,-17.18
+eps,0.13999999994179235
+total_liability,1165647489.0
+market_cap,136.07319999953435
+roe,2.67
+pcf_ratio,379.6525
+pe_ratio_lyr,77.87899999999998
+pb_ratio,7.1851
+net_profit_to_total_revenue,18.01
+eps,0.0988

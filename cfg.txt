@@ -1,0 +1,9 @@
+[train]
+train_dir=./data/fund_2015q2.txt
+baf_dir=./baffel/fund_15q2_baf.txt
+[test]
+test_dir=./data/fund_2017q3.txt
+[kmeans]
+k=3
+initpath=./kmeans_init/fund_2015q1_init.txt
+clusterpath=./kmeans_cluster/fund_2015q1_cluster.txt

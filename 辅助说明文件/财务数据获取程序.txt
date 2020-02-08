@@ -1,0 +1,35 @@
+from jqdata import jy
+from jqdata import *
+#获取数据时需修改fm、to和pool
+#fm是财务数据发布的年份季度，to是为了得到股票在财报发布后一个财务季度内的收益率设置的，to一般取fm的下一个季度
+fm,to='2017q3','2018q1'
+#pool是需要获取数据的股票列表
+pool=get_industry_stocks('801730',date=fm[:4]+'-'+qdic[fm[-1]])
+qdic={'1':'04-25','2':'08-25','3':'10-25'}
+
+df = get_fundamentals(query(balance.pubDate,balance.total_assets,balance.total_liability,
+valuation.market_cap,indicator.roe,valuation.pcf_ratio,valuation.pe_ratio_lyr,valuation.pb_ratio,
+                        indicator.net_profit_to_total_revenue,indicator.eps).filter(
+    # 这里不能使用 in 操作, 要使用in_()函数
+    valuation.code.in_([pool[0]])
+),statDate=fm)
+df['code']=pool[0]
+for i in pool[1:]:
+    df0 = get_fundamentals(query(balance.pubDate,balance.total_assets,balance.total_liability,
+  valuation.market_cap,indicator.roe,valuation.pcf_ratio,valuation.pe_ratio_lyr,valuation.pb_ratio,
+                            indicator.net_profit_to_total_revenue,indicator.eps).filter(
+        # 这里不能使用 in 操作, 要使用in_()函数
+        valuation.code.in_([i])
+    ),statDate=fm)
+    df0['code']=i
+    df=df.append(df0)
+df.index=list(df['pubDate'])
+to_dt = get_fundamentals(query(balance.pubDate).filter(valuation.code.in_(pool)),statDate=to)
+pc=get_price(list(df['code']),start_date=fm[:4]+'-'+qdic[fm[-1]],end_date=to[:4]+'-'+qdic[to[-1]],fields='close')['close']
+r=(pc.iloc[0]-pc.iloc[-1])/len(pc)
+code=df['code']
+df=df.drop('code',axis=1)
+df.insert(0,'code',code)
+df.insert(1,'r',list(r))
+df.to_csv('fund_'+fm+'.txt',sep='\t',index=False)
+#pd.read_csv('fund_'+dt+'.txt',sep='\t',index_col=0)
